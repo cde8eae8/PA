@@ -30,41 +30,21 @@ struct Graph {
 };
 
 void seq_bfs(Graph& graph) {
-    std::vector<uint64_t> front;
-    std::vector<uint64_t> front2;
-    graph.nodes[0].distance = 0;
-    front.push_back(0);
-    while (!front.empty()) {
-        for (auto id : front) {
-            int dist = graph.nodes[id].distance + 1;
-            for (auto e : graph.nodes[id].edges) {
-                Node &node = graph.nodes[e];
-                if (node.distance == -1) {
-                    node.distance = dist;
-                    front2.push_back(e);
-                }
+    std::queue<uint64_t> q;
+    int id = graph.get_id(0, 0, 0);
+    q.push(id);
+    graph.nodes[id].distance = 0;
+    while (!q.empty()) {
+        int id = q.front();
+        q.pop();
+        int dist = graph.nodes[id].distance;
+        for (auto e : graph.nodes[id].edges) {
+            if (graph.nodes[e].distance == -1) {
+                graph.nodes[e].distance = dist + 1;
+                q.push(e);
             }
         }
-        std::swap(front, front2);
-        front2.clear();
     }
-
-
-//    std::queue<uint64_t> q;
-//    int id = graph.get_id(0, 0, 0);
-//    q.push(id);
-//    graph.nodes[id].distance = 0;
-//    while (!q.empty()) {
-//        int id = q.front();
-//        q.pop();
-//        int dist = graph.nodes[id].distance;
-//        for (auto e : graph.nodes[id].edges) {
-//            if (graph.nodes[e].distance == -1) {
-//                graph.nodes[e].distance = dist + 1;
-//                q.push(e);
-//            }
-//        }
-//    }
 }
 
 void par_bfs(Graph& graph) {
@@ -152,36 +132,6 @@ bool check(Graph& graph) {
     }
     return ok;
 }
-
-//int main() {
-//    size_t size = 400;
-//    Graph graph(size);
-
-//    auto add_edge = [&graph](int from, int i, int j, int k) {
-//        if (!graph.valid_id(i, j, k)) {
-//            return;
-//        }
-//        size_t edge = graph.get_id(i, j, k);
-//        graph.nodes[from].edges.push_back(edge);
-//    };
-
-//    for (int i = 0; i < size; ++i) {
-//        for (int j = 0; j < size; ++j) {
-//            for (int k = 0; k < size; ++k) {
-//                int id = graph.get_id(i, j, k);
-//                Node& node = graph.nodes[id];
-
-//                for (int di : {-1, 1}) {
-//                    add_edge(id, i + di, j, k);
-//                    add_edge(id, i, j + di, k);
-//                    add_edge(id, i, j, k + di);
-//                }
-//            }
-//        }
-//    }
-//    par_bfs(graph);
-//    check(graph);
-//}
 
 struct BenchInfo {
     uint64_t lastDelta{};
