@@ -52,10 +52,10 @@ void par_bfs(Graph& graph) {
         uint64_t id;
     };
 
-    std::unique_ptr<Front[]> frontPtr = std::make_unique<Front[]>(graph.nodes.size());
-    auto firstChildPosLocal = std::make_unique<uint64_t[]>(graph.nodes.size());
-    auto firstChildPos = std::make_unique<uint64_t[]>(graph.nodes.size());
-    std::unique_ptr<Front[]> front2Ptr = std::make_unique<Front[]>(graph.nodes.size());
+    std::unique_ptr<Front[]> frontPtr(new Front[graph.nodes.size()]);
+    std::unique_ptr<uint64_t[]> firstChildPosLocal(new uint64_t[graph.nodes.size()]);
+    std::unique_ptr<uint64_t[]> firstChildPos(new uint64_t[graph.nodes.size()]);
+    std::unique_ptr<Front[]> front2Ptr(new Front[graph.nodes.size()]);
     Front* front = frontPtr.get();
     Front* front2 = front2Ptr.get();
 
